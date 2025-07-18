@@ -8,6 +8,7 @@ public class ChartConfiguration {
     public var showLimits = true
     public var showVerticalLines = true
     public var isInteractive = true
+    public var redrawOnResize = false
 
     public var mainHeight: CGFloat = 183
     public var indicatorHeight: CGFloat = 47

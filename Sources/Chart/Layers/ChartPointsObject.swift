@@ -66,6 +66,12 @@ class ChartPointsObject: NSObject, IChartObject {
     }
 
     public func set(points: [CGPoint]?, animated: Bool = false) {
+// todo: if needed activate animation
+
+//        if layer.bounds.size.width == .zero || layer.bounds.size.height == .zero {
+//            return
+//        }
+//
         let points = points ?? []
         // we must revert y-coordinate before set
         let reverted = reversePoint ? points.map { CGPoint(x: $0.x, y: 1 - $0.y) } : points
