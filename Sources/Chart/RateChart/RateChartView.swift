@@ -22,6 +22,8 @@ public class RateChartView: UIView {
 
     private var chartData: ChartData?
     private var indicators = [ChartIndicator]()
+    private var showIndicators: Bool = true
+    private var limitFormatter: ((Decimal) -> String?)? = nil
 
     public init(configuration: ChartConfiguration) {
         self.configuration = configuration
@@ -90,6 +92,18 @@ public class RateChartView: UIView {
         fatalError("not implemented")
     }
 
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+
+        guard configuration.redrawOnResize else {
+            return
+        }
+
+        if (bounds.size.width > 0 && bounds.size.height > 0), let chartData {
+            set(chartData: chartData, indicators: indicators, showIndicators: showIndicators, limitFormatter: limitFormatter)
+        }
+    }
+
     @discardableResult public func set(chartData: ChartData, indicators: [ChartIndicator] = [], showIndicators: Bool = true, limitFormatter: ((Decimal) -> String?)? = nil, animated: Bool = true) -> [IndicatorFactory.CalculatingError] {
         // 1. calculate all indicators and add it to chartData
         let factory = IndicatorFactory()
@@ -133,6 +147,8 @@ public class RateChartView: UIView {
         // store changes after adding and deleting indicators
         self.chartData = chartData
         self.indicators = showIndicators ? indicators : []
+        self.showIndicators = showIndicators
+        self.limitFormatter = limitFormatter
 
         // 4b. update existed and add new viewModels
         for indicator in indicators {
